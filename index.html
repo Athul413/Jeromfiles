@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#f5f7fb" />
+<title>Audio Library</title>
+<style>
+:root{--bg:#f5f7fb;--panel:#ffffff;--green:#2563eb;--cyan:#64748b;--muted:#64748b;--line:#dbe2ea;--glow:0 8px 28px rgba(15,23,42,.06)}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100vh;color:#172033;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);overflow-x:hidden}
+body:before,body:after{display:none}.matrix{display:none}.shell{position:relative;width:min(1100px,100%);margin:auto;padding:22px 18px 30px}.topbar{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:8px 4px 16px;color:#64748b;font-size:12px}.status{color:#16a34a}.hero{text-align:center;padding:32px 10px 20px}.eyebrow{font-size:12px;letter-spacing:2px;color:#64748b;text-transform:uppercase}h1{font-size:clamp(25px,4.5vw,42px);letter-spacing:-1px;margin:13px 0;color:#172033}.subtitle{font-size:14px;color:#64748b}.terminal{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px 18px;margin:20px auto 28px;max-width:920px;box-shadow:var(--glow);font-size:13px;line-height:1.8;color:#475569}.terminal p{margin:0}.cursor{display:inline-block;width:7px;height:14px;background:#2563eb;vertical-align:middle;animation:blink 1s steps(2,start) infinite}@keyframes blink{to{visibility:hidden}}
+.records{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.record{position:relative;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;color:#172033;padding:20px 18px 17px;min-height:240px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(15,23,42,.035)}.record:before{content:none}.record-cover{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;margin:0 0 16px;background:#eef2f7}.record h2{margin-top:8px}.record .openbtn{display:flex;justify-content:space-between;align-items:center}.record:hover,.record:focus-visible{transform:translateY(-3px);border-color:#93c5fd;box-shadow:0 10px 26px rgba(37,99,235,.1);outline:none}.rec-label{font-size:11px;letter-spacing:1px;color:#64748b}.discrow{display:flex;align-items:center;gap:15px;margin:22px 0}.disc{width:55px;height:55px;border:1px solid #cbd5e1;border-radius:50%;display:grid;place-items:center;background:#f8fafc}.disc:after{content:"";width:21px;height:21px;border:3px double #2563eb;border-radius:50%}.mini-wave{display:flex;align-items:center;gap:3px;height:34px;flex:1}.mini-wave i{display:block;width:3px;height:var(--h);background:#93c5fd;opacity:.9;border-radius:4px}.rec-id{font-size:11px;color:#64748b;margin-bottom:8px}.record h2{font-size:17px;margin:0 0 9px;font-weight:650}.record p{font-size:13px;line-height:1.6;color:#64748b;min-height:38px}.openbtn{display:block;margin-top:17px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:12px;color:#2563eb;font-weight:600}.footnote{margin-top:30px;border-top:1px solid var(--line);padding:14px 4px;color:#64748b;font-size:11px;letter-spacing:.5px}
+.player-view{display:none;animation:appear .3s ease}.player-view.active{display:block}@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.back{background:#fff;border:1px solid var(--line);border-radius:9px;color:#334155;font:inherit;padding:10px 16px;cursor:pointer}.back:hover{background:#f8fafc}.player-head{text-align:center;padding:18px 0}.player-head h2{font-size:clamp(24px,4vw,36px);letter-spacing:-.5px;margin:12px 0;color:#172033}.player-head p{color:#64748b;font-size:14px}.player-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:22px;align-items:start}.art: ;-frame{border:1px solid var(--line);border-radius:16px;padding:8px;background:#fff;box-shadow:var(--glow)}.art-frame img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px}.art-caption{font-size:11px;color:#64748b;padding:10px 4px 4px}.player-panel{border:1px solid var(--line);border-radius:16px;background:#fff;padding:20px;box-shadow:var(--glow)}.waveform{height:78px;display:flex;align-items:center;justify-content:center;gap:3px;margin:0 0 20px;overflow:hidden}.waveform span{width:3px;min-width:2px;background:#60a5fa;height:var(--h);opacity:.85;transform-origin:center;border-radius:4px}.playing .waveform span{animation:pulse var(--d) ease-in-out infinite alternate;animation-delay:var(--delay)}@keyframes pulse{to{transform:scaleY(.25);opacity:.35}}.time-row{display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:9px}.range{width:100%;accent-color:#2563eb;cursor:pointer}.controls{display:flex;justify-content:center;align-items:center;gap:18px;margin:20px 0}.control{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);color:#334155;background:#fff;font:inherit;font-size:17px;cursor:pointer}.control.main{width:62px;height:62px;border:0;background:#2563eb;color:#fff;font-size:23px;box-shadow:0 5px 14px rgba(37,99,235,.2)}.control:hover{background:#eff6ff}.control.main:hover{background:#1d4ed8}.volume-row{display:flex;align-items:center;gap:12px;font-size:12px;margin-top:18px}.volume-row input{flex:1;min-width:0}.message{min-height:18px;color:#64748b;font-size:11px;margin-top:14px;line-height:1.5}.player-bottom{text-align:center;font-size:11px;color:#94a3b8;letter-spacing:.5px;margin:24px 0 0}.hide{display:none!important}
+@media(max-width:760px){.shell{padding:14px 12px 24px}.hero{padding-top:25px}.records{grid-template-columns:1fr}.record{min-height:auto}.record p{min-height:0}.player-layout{grid-template-columns:1fr}.player-panel{padding:16px}.player-head h2{letter-spacing:0}.topbar{font-size:10px}.terminal{font-size:11px;padding:13px}.records{gap:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="matrix" aria-hidden="true" id="matrix"></div>
+<main class="shell">
+  
+  <section id="archiveView">
+    <header class="hero"><div class="eyebrow">A little space for sound</div><h1>Your Audio Library</h1><div class="subtitle">Choose a track to listen</div></header>
+    
+    <section class="records" aria-label="Audio records">
+      <button class="record" data-record="0"><div class="discrow" aria-hidden="true"><span class="disc"></span><span class="mini-wave"></span></div><span class="rec-label">TRACK 01</span><h2>Jerom files17min</h2><span class="openbtn">Listen <span aria-hidden="true">→</span></span></button>
+      <button class="record" data-record="1"><div class="discrow" aria-hidden="true"><span class="disc"></span><span class="mini-wave"></span></div><span class="rec-label">TRACK 02</span><h2>Jerom file 3min</h2><span class="openbtn">Listen <span aria-hidden="true">→</span></span></button>
+      <button class="record" data-record="2"><div class="discrow" aria-hidden="true"><span class="disc"></span><span class="mini-wave"></span></div><span class="rec-label">TRACK 03</span><h2>Jerom file</h2><span class="openbtn">Listen <span aria-hidden="true">→</span></span></button>
+    </section>
+    
+  </section>
+
+  <section id="playerView" class="player-view" aria-label="Audio player">
+    <button id="backBtn" class="back">← BACK TO ARCHIVE</button>
+    <header class="player-head"><h2 id="playerTitle">ABSOLUTE JEROME</h2></header>
+    <div class="player-layout">
+      <div class="art-frame"><img id="recordImage" src="image.png" alt="Audio cover image"/></div>
+      <div class="player-panel" id="playerPanel">
+        
+        <div class="waveform" id="waveform" aria-hidden="true"></div>
+        <audio id="audio" preload="metadata"></audio>
+        <div class="time-row"><span id="currentTime">00:00</span><span id="duration">--:--</span></div>
+        <input class="range" id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek audio position" />
+        <div class="controls"><button class="control" id="back15" title="Back 15 seconds" aria-label="Back 15 seconds">↶<small>15</small></button><button class="control main" id="playBtn" aria-label="Play audio">▶</button><button class="control" id="forward15" title="Forward 15 seconds" aria-label="Forward 15 seconds">↷<small>15</small></button></div>
+        <div class="volume-row"><button id="muteBtn" class="control" aria-label="Mute audio">♪</button><input class="range" id="volume" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume"/><span id="volumeValue">80%</span></div>
+        <div id="message" class="message" role="status"></div>
+      </div>
+    </div>
+    
+  </section>
+</main>
+<script>
+// EDIT THIS LIST to change record names, descriptions, and file paths.
+const RECORDS = [
+  { id: 'TRACK 01', title: 'ABSOLUTE JEROM', audio: 'audio1.mp3', image: 'image.png' },
+  { id: 'TRACK 02', title: 'Absolute jerome', audio: 'audio2.mp3', image: 'image.png' },
+  { id: 'TRACK 03', title: 'Absolute Jerome', audio: 'audio3.mp3', image: 'image.png' }
+];
+const $ = id => document.getElementById(id);
+const audio = $('audio'); let selectedIndex = 0; let wasMuted = false;
+function formatTime(seconds){ if(!Number.isFinite(seconds)||seconds<0)return '--:--'; const m=Math.floor(seconds/60),s=Math.floor(seconds%60);return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
+function makeBars(container,count,mini=false){container.innerHTML='';for(let i=0;i<count;i++){const el=document.createElement(mini?'i':'span');const h=mini?`${8+Math.abs(Math.sin(i*1.8))*23}px`:`${8+Math.abs(Math.sin(i*.49)*Math.cos(i*.19))*62}px`;el.style.setProperty('--h',h);el.style.setProperty('--d',`${.35+(i%7)*.12}s`);el.style.setProperty('--delay',`${(i%11)*-.09}s`);container.appendChild(el)}}
+document.querySelectorAll('.mini-wave').forEach(w=>makeBars(w,18,true));makeBars($('waveform'),52);
+// Decorative lightweight background characters.
+$('matrix').textContent=Array.from({length:260},(_,i)=>((i*17+3)%2?'1':'0')+(i%9===0?'\n':'')).join('');
+function showRecord(index){selectedIndex=index;const r=RECORDS[index];audio.pause();audio.currentTime=0;audio.src=r.audio;audio.load();$('playerTitle').textContent=r.title;$('recordImage').src=r.image;$('recordImage').alt=`Visual for ${r.title}`;$('currentTime').textContent='00:00';$('duration').textContent='--:--';$('seek').value=0;$('playBtn').textContent='▶';$('playBtn').setAttribute('aria-label','Play audio');$('message').textContent='';$('archiveView').classList.add('hide');$('playerView').classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function goBack(){audio.pause();$('playerPanel').classList.remove('playing');$('playerView').classList.remove('active');$('archiveView').classList.remove('hide');$('message').textContent='';window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.record').forEach(btn=>btn.addEventListener('click',()=>showRecord(Number(btn.dataset.record))));$('backBtn').addEventListener('click',goBack);
+$('playBtn').addEventListener('click',async()=>{if(audio.paused){try{await audio.play();}catch(e){$('message').textContent='Could not play this audio. Check that the audio file is in the website folder.';}}else audio.pause();});
+audio.addEventListener('play',()=>{$('playBtn').textContent='Ⅱ';$('playBtn').setAttribute('aria-label','Pause audio');$('playerPanel').classList.add('playing');$('message').textContent='';});
+audio.addEventListener('pause',()=>{$('playBtn').textContent='▶';$('playBtn').setAttribute('aria-label','Play audio');$('playerPanel').classList.remove('playing');});
+audio.addEventListener('loadedmetadata',()=>{$('duration').textContent=formatTime(audio.duration);$('message').textContent='';});
+audio.addEventListener('timeupdate',()=>{ $('currentTime').textContent=formatTime(audio.currentTime);$('seek').value=audio.duration?Math.round(audio.currentTime/audio.duration*1000):0; });
+audio.addEventListener('ended',()=>{$('message').textContent='Playback finished.';});
+audio.addEventListener('error',()=>{if(audio.src){$('message').textContent='Audio file unavailable. Check the filename and try again.';}});
+$('seek').addEventListener('input',()=>{if(Number.isFinite(audio.duration)&&audio.duration>0){audio.currentTime=(Number($('seek').value)/1000)*audio.duration;$('currentTime').textContent=formatTime(audio.currentTime);}});
+$('volume').addEventListener('input',()=>{audio.volume=Number($('volume').value);audio.muted=false;$('volumeValue').textContent=Math.round(audio.volume*100)+'%';$('muteBtn').textContent='♪';$('muteBtn').setAttribute('aria-label','Mute audio');});audio.volume=.8;
+$('muteBtn').addEventListener('click',()=>{audio.muted=!audio.muted;$('muteBtn').textContent=audio.muted?'×':'♪';$('muteBtn').setAttribute('aria-label',audio.muted?'Unmute audio':'Mute audio');});
+$('back15').addEventListener('click',()=>{if(Number.isFinite(audio.duration))audio.currentTime=Math.max(0,audio.currentTime-15)});$('forward15').addEventListener('click',()=>{if(Number.isFinite(audio.duration))audio.currentTime=Math.min(audio.duration,audio.currentTime+15)});
+document.addEventListener('keydown',e=>{if(e.code==='Escape'&&$('playerView').classList.contains('active'))goBack();if(e.code==='Space'&&$('playerView').classList.contains('active')&&e.target.tagName!=='INPUT'&&e.target.tagName!=='BUTTON'){e.preventDefault();$('playBtn').click();}});
+</script>
+</body>
+</html>
